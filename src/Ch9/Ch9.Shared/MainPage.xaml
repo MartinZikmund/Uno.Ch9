@@ -199,9 +199,10 @@
 							HorizontalAlignment="Center">
 
 					<!-- Progress Ring -->
-					<ProgressRing IsActive="True"
+                    <ProgressRing IsActive="True"
 								  Height="20"
 								  Width="20"
+                                  Foreground="White"
 								  HorizontalAlignment="Center"
 								  VerticalAlignment="Center"
 								  Margin="0,12" />
@@ -209,7 +210,7 @@
 					<!-- Loading Message -->
 					<TextBlock Text="Loading..."
 							   x:Uid="MainPage_Loading"
-							   Style="{StaticResource Typo01}" />
+                               Style="{StaticResource Typo02}" />
 				</StackPanel>
 			</Grid>
 

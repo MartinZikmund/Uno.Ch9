@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
@@ -22,30 +21,33 @@ namespace Ch9
 			_feeds = feeds ?? throw new ArgumentNullException(nameof(feeds));
 		}
 
-		public Task<Post[]> GetRecentPosts()
+		public async Task<Post[]> GetRecentPosts()
 		{
-			var posts = new List<Post>();
-
-			foreach (var feed in _feeds)
+			return await Task.Run(() =>
 			{
-				var rssFeed = GetRssFeed(feed.Url);
+				var posts = new List<Post>();
 
-				var feedPosts = rssFeed
-					.Items
-					.Select(i => CreatePost(i, feed))
+				foreach (var feed in _feeds)
+				{
+					var rssFeed = GetRssFeed(feed.Url);
+
+					var feedPosts = rssFeed
+						.Items
+						.Select(i => CreatePost(i, feed))
+						.ToArray();
+
+					posts.AddRange(feedPosts);
+				}
+
+				var comparer = new PostEqualityComparer();
+
+				var orderedPosts = posts
+					.Distinct(comparer)
+					.OrderByDescending(p => p.Date)
 					.ToArray();
 
-				posts.AddRange(feedPosts);
-			}
-
-			var comparer = new PostEqualityComparer();
-
-			var orderedPosts = posts
-				.Distinct(comparer)
-				.OrderByDescending(p => p.Date)
-				.ToArray();
-
-			return Task.FromResult(orderedPosts);
+				return orderedPosts;
+			});
 		}
 
 		private SyndicationFeed GetRssFeed(string url)
