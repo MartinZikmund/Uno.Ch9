@@ -1,0 +1,27 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "04:00"
+  open-pull-requests-limit: 10
+  labels:
+  - kind/dependency
+  - do-not-merge/work-in-progress
+  ignore:
+  - dependency-name: Uno.UI
+    versions:
+    - 3.1.12
+    - 3.1.14
+    - 3.5.1
+  - dependency-name: Uno.UI.RemoteControl
+    versions:
+    - 3.4.0
+    - 3.5.1
+  - dependency-name: Xamarin.Essentials
+    versions:
+    - 1.6.0
+  - dependency-name: Microsoft.NETCore.UniversalWindowsPlatform
+    versions:
+    - 6.2.11
